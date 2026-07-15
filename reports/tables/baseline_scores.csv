@@ -1,0 +1,7 @@
+rank,baseline,rmsle,mae,prediction_rule
+1,Weekday mean (8 weeks),0.520631,84.098213,Series-weekday mean from prior 8 weeks
+2,Recent mean (28 days),0.521588,97.223091,Repeat mean of final 28 historical dates
+3,Recent mean (7 days),0.524003,98.612416,Repeat mean of final 7 historical dates
+4,Repeated final week,0.617040,96.535391,Repeat final complete 7-day historical pattern
+5,Last observed value,0.659484,207.505790,Repeat final pre-validation value
+6,Zero forecast,4.419500,467.142950,Predict 0

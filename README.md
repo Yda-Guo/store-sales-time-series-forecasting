@@ -4,7 +4,7 @@
 
 This repository contains an undergraduate introductory research project based on Kaggle's **Store Sales - Time Series Forecasting** competition. The goal is to develop a clear and reproducible forecasting study for daily sales across product families and Favorita stores in Ecuador.
 
-The work is organized in stages. Stage 1 establishes the project structure and audits the raw data, while Stage 2 provides descriptive exploratory analysis. Validation, feature engineering, and modeling belong to later stages.
+The work is organized in stages. Stage 1 establishes the project structure and audits the raw data, Stage 2 provides descriptive exploratory analysis, and Stage 3 establishes chronological validation and simple baselines. Feature engineering and modeling belong to later stages.
 
 ## Dataset
 
@@ -70,3 +70,15 @@ No exploratory analysis, feature engineering, predictive modeling, validation, o
 Stage 2 is complete. The reproducible [EDA notebook](notebooks/02_exploratory_data_analysis.ipynb) examines temporal, weekday, monthly, family, store, promotion, transaction, holiday, earthquake, and oil-price patterns. A concise [EDA summary](reports/eda_summary.md) presents the main findings and selected figures.
 
 The analysis is descriptive and associative. It does not include predictive modeling, a validation split, model features, or submission generation; those tasks remain for later stages.
+
+## Stage 3 Status
+
+Stage 3 is complete. The [validation and baseline notebook](notebooks/03_validation_and_baselines.ipynb) and [baseline results report](reports/baseline_results.md) use the final 16 training dates (`2017-07-31` through `2017-08-15`) as a leakage-safe holdout.
+
+The best transparent baseline is the **8-week weekday mean**, with validation RMSLE **0.520631**. The reusable baseline module can refresh the generated score table with:
+
+```bash
+python -m src.baselines
+```
+
+No machine-learning model, Kaggle test prediction, or submission is included. Stage 4 and later stages remain incomplete.
