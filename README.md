@@ -4,7 +4,7 @@
 
 This repository contains an undergraduate introductory research project based on Kaggle's **Store Sales - Time Series Forecasting** competition. The goal is to develop a clear and reproducible forecasting study for daily sales across product families and Favorita stores in Ecuador.
 
-The work is organized in stages. Stage 1 establishes the project structure and audits the raw data, Stage 2 provides descriptive exploratory analysis, Stage 3 establishes chronological validation and simple baselines, and Stage 4 engineers leakage-safe features. Model comparison belongs to later stages.
+The work is organized in stages. Stage 1 establishes the project structure and audits the raw data, Stage 2 provides descriptive exploratory analysis, Stage 3 establishes chronological validation and simple baselines, Stage 4 engineers leakage-safe features, and Stage 5 compares lightweight models. Final forecasting and reporting belong to Stage 6.
 
 ## Dataset
 
@@ -95,4 +95,16 @@ Refresh the generated feature tables with:
 python -m src.features
 ```
 
-Ridge is used only to verify feature information. Stage 5 model comparison remains incomplete, and no Kaggle test prediction or submission has been generated.
+In Stage 4, Ridge is used only to verify feature information; no Kaggle test prediction or submission is generated.
+
+## Stage 5 Status
+
+Stage 5 is complete. The [model-comparison notebook](notebooks/05_model_comparison.ipynb) and [model-comparison report](reports/model_comparison.md) compare the Stage 3 weekday baseline, Ridge, and one fixed HistGradientBoosting model on the unchanged 16-day holdout.
+
+Model ranking by validation RMSLE:
+
+1. HistGradientBoosting — **0.449788**
+2. Ridge regression — **0.494938**
+3. Weekday mean baseline — **0.520631**
+
+HistGradientBoosting is selected for Stage 6 because it provides a clear validation improvement at modest computational cost. Stage 6 remains incomplete, and no Kaggle test prediction or submission has been generated.

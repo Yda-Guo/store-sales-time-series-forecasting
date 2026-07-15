@@ -1,0 +1,4 @@
+rank,model_name,model_type,validation_rmsle,difference_from_weekday_baseline,difference_from_ridge,input_feature_count,training_window,training_time_seconds,specification
+1,HistGradientBoosting,nonlinear histogram boosting,0.449788,-0.070843,-0.045150,29,final 365 days before validation,3.529074,"learning_rate=0.08, max_iter=120, max_leaf_nodes=31"
+2,Ridge regression,regularized linear,0.494938,-0.025693,0.000000,29,final 365 days before validation,0.101151,"Ridge(alpha=1.0), log1p target"
+3,Weekday mean baseline,seasonal baseline,0.520631,0.000000,0.025693,0,previous 8 weeks,0.000000,store-family weekday mean

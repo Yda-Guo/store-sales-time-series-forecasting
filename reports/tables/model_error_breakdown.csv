@@ -1,0 +1,207 @@
+group_type,group_value,model_name,rmsle
+family,AUTOMOTIVE,Ridge regression,0.535113
+family,BABY CARE,Ridge regression,0.298450
+family,BEAUTY,Ridge regression,0.520911
+family,BEVERAGES,Ridge regression,0.258575
+family,BOOKS,Ridge regression,0.114199
+family,BREAD/BAKERY,Ridge regression,0.257959
+family,CELEBRATION,Ridge regression,0.578347
+family,CLEANING,Ridge regression,0.389775
+family,DAIRY,Ridge regression,0.238111
+family,DELI,Ridge regression,0.248413
+family,EGGS,Ridge regression,0.362049
+family,FROZEN FOODS,Ridge regression,0.327308
+family,GROCERY I,Ridge regression,0.226299
+family,GROCERY II,Ridge regression,0.711224
+family,HARDWARE,Ridge regression,0.555744
+family,HOME AND KITCHEN I,Ridge regression,0.486059
+family,HOME AND KITCHEN II,Ridge regression,0.494896
+family,HOME APPLIANCES,Ridge regression,0.340176
+family,HOME CARE,Ridge regression,0.328571
+family,LADIESWEAR,Ridge regression,0.540468
+family,LAWN AND GARDEN,Ridge regression,0.464176
+family,LINGERIE,Ridge regression,0.671073
+family,"LIQUOR,WINE,BEER",Ridge regression,0.600554
+family,MAGAZINES,Ridge regression,0.539529
+family,MEATS,Ridge regression,0.302763
+family,PERSONAL CARE,Ridge regression,0.297623
+family,PET SUPPLIES,Ridge regression,0.496759
+family,PLAYERS AND ELECTRONICS,Ridge regression,0.483474
+family,POULTRY,Ridge regression,0.288467
+family,PREPARED FOODS,Ridge regression,0.303592
+family,PRODUCE,Ridge regression,0.202139
+family,SCHOOL AND OFFICE SUPPLIES,Ridge regression,1.455789
+family,SEAFOOD,Ridge regression,0.520406
+store,1,Ridge regression,0.500376
+store,2,Ridge regression,0.382891
+store,3,Ridge regression,0.345842
+store,4,Ridge regression,0.381868
+store,5,Ridge regression,0.405414
+store,6,Ridge regression,0.350145
+store,7,Ridge regression,0.383754
+store,8,Ridge regression,0.356993
+store,9,Ridge regression,0.597984
+store,10,Ridge regression,0.470977
+store,11,Ridge regression,0.504140
+store,12,Ridge regression,0.508443
+store,13,Ridge regression,0.473960
+store,14,Ridge regression,0.577975
+store,15,Ridge regression,0.502675
+store,16,Ridge regression,0.452138
+store,17,Ridge regression,0.541373
+store,18,Ridge regression,0.509493
+store,19,Ridge regression,0.645162
+store,20,Ridge regression,0.619529
+store,21,Ridge regression,0.433253
+store,22,Ridge regression,0.550243
+store,23,Ridge regression,0.462831
+store,24,Ridge regression,0.379349
+store,25,Ridge regression,0.504402
+store,26,Ridge regression,0.566214
+store,27,Ridge regression,0.402053
+store,28,Ridge regression,0.477123
+store,29,Ridge regression,0.413369
+store,30,Ridge regression,0.467245
+store,31,Ridge regression,0.432739
+store,32,Ridge regression,0.483033
+store,33,Ridge regression,0.427613
+store,34,Ridge regression,0.460860
+store,35,Ridge regression,0.467123
+store,36,Ridge regression,0.500711
+store,37,Ridge regression,0.407943
+store,38,Ridge regression,0.446509
+store,39,Ridge regression,0.441507
+store,40,Ridge regression,0.447472
+store,41,Ridge regression,0.431688
+store,42,Ridge regression,0.396265
+store,43,Ridge regression,0.456279
+store,44,Ridge regression,0.726770
+store,45,Ridge regression,0.400137
+store,46,Ridge regression,0.396390
+store,47,Ridge regression,0.846397
+store,48,Ridge regression,0.764128
+store,49,Ridge regression,0.428578
+store,50,Ridge regression,0.870598
+store,51,Ridge regression,0.411525
+store,52,Ridge regression,0.350942
+store,53,Ridge regression,0.411057
+store,54,Ridge regression,0.441798
+date,2017-07-31 00:00:00,Ridge regression,0.435090
+date,2017-08-01 00:00:00,Ridge regression,0.520141
+date,2017-08-02 00:00:00,Ridge regression,0.451039
+date,2017-08-03 00:00:00,Ridge regression,0.454225
+date,2017-08-04 00:00:00,Ridge regression,0.479140
+date,2017-08-05 00:00:00,Ridge regression,0.455011
+date,2017-08-06 00:00:00,Ridge regression,0.495476
+date,2017-08-07 00:00:00,Ridge regression,0.488353
+date,2017-08-08 00:00:00,Ridge regression,0.504612
+date,2017-08-09 00:00:00,Ridge regression,0.478046
+date,2017-08-10 00:00:00,Ridge regression,0.492452
+date,2017-08-11 00:00:00,Ridge regression,0.544470
+date,2017-08-12 00:00:00,Ridge regression,0.531889
+date,2017-08-13 00:00:00,Ridge regression,0.533095
+date,2017-08-14 00:00:00,Ridge regression,0.524760
+date,2017-08-15 00:00:00,Ridge regression,0.514424
+family,AUTOMOTIVE,HistGradientBoosting,0.524703
+family,BABY CARE,HistGradientBoosting,0.277852
+family,BEAUTY,HistGradientBoosting,0.495317
+family,BEVERAGES,HistGradientBoosting,0.257639
+family,BOOKS,HistGradientBoosting,0.081993
+family,BREAD/BAKERY,HistGradientBoosting,0.198202
+family,CELEBRATION,HistGradientBoosting,0.571717
+family,CLEANING,HistGradientBoosting,0.352745
+family,DAIRY,HistGradientBoosting,0.170568
+family,DELI,HistGradientBoosting,0.203538
+family,EGGS,HistGradientBoosting,0.326696
+family,FROZEN FOODS,HistGradientBoosting,0.310204
+family,GROCERY I,HistGradientBoosting,0.193474
+family,GROCERY II,HistGradientBoosting,0.700822
+family,HARDWARE,HistGradientBoosting,0.532449
+family,HOME AND KITCHEN I,HistGradientBoosting,0.491442
+family,HOME AND KITCHEN II,HistGradientBoosting,0.479759
+family,HOME APPLIANCES,HistGradientBoosting,0.320821
+family,HOME CARE,HistGradientBoosting,0.262852
+family,LADIESWEAR,HistGradientBoosting,0.518439
+family,LAWN AND GARDEN,HistGradientBoosting,0.438192
+family,LINGERIE,HistGradientBoosting,0.646195
+family,"LIQUOR,WINE,BEER",HistGradientBoosting,0.530691
+family,MAGAZINES,HistGradientBoosting,0.548606
+family,MEATS,HistGradientBoosting,0.248232
+family,PERSONAL CARE,HistGradientBoosting,0.255535
+family,PET SUPPLIES,HistGradientBoosting,0.481083
+family,PLAYERS AND ELECTRONICS,HistGradientBoosting,0.482667
+family,POULTRY,HistGradientBoosting,0.242716
+family,PREPARED FOODS,HistGradientBoosting,0.311819
+family,PRODUCE,HistGradientBoosting,0.180370
+family,SCHOOL AND OFFICE SUPPLIES,HistGradientBoosting,1.133558
+family,SEAFOOD,HistGradientBoosting,0.509419
+store,1,HistGradientBoosting,0.446166
+store,2,HistGradientBoosting,0.367132
+store,3,HistGradientBoosting,0.304693
+store,4,HistGradientBoosting,0.356937
+store,5,HistGradientBoosting,0.393069
+store,6,HistGradientBoosting,0.320735
+store,7,HistGradientBoosting,0.364979
+store,8,HistGradientBoosting,0.333048
+store,9,HistGradientBoosting,0.489484
+store,10,HistGradientBoosting,0.436923
+store,11,HistGradientBoosting,0.431094
+store,12,HistGradientBoosting,0.471080
+store,13,HistGradientBoosting,0.481886
+store,14,HistGradientBoosting,0.531396
+store,15,HistGradientBoosting,0.457596
+store,16,HistGradientBoosting,0.437013
+store,17,HistGradientBoosting,0.442684
+store,18,HistGradientBoosting,0.537455
+store,19,HistGradientBoosting,0.625712
+store,20,HistGradientBoosting,0.504798
+store,21,HistGradientBoosting,0.411419
+store,22,HistGradientBoosting,0.493562
+store,23,HistGradientBoosting,0.423498
+store,24,HistGradientBoosting,0.346882
+store,25,HistGradientBoosting,0.499281
+store,26,HistGradientBoosting,0.530378
+store,27,HistGradientBoosting,0.375056
+store,28,HistGradientBoosting,0.432730
+store,29,HistGradientBoosting,0.381663
+store,30,HistGradientBoosting,0.449466
+store,31,HistGradientBoosting,0.397087
+store,32,HistGradientBoosting,0.457901
+store,33,HistGradientBoosting,0.408686
+store,34,HistGradientBoosting,0.441678
+store,35,HistGradientBoosting,0.443547
+store,36,HistGradientBoosting,0.491036
+store,37,HistGradientBoosting,0.375697
+store,38,HistGradientBoosting,0.433735
+store,39,HistGradientBoosting,0.421595
+store,40,HistGradientBoosting,0.434469
+store,41,HistGradientBoosting,0.407863
+store,42,HistGradientBoosting,0.383422
+store,43,HistGradientBoosting,0.440135
+store,44,HistGradientBoosting,0.638349
+store,45,HistGradientBoosting,0.351154
+store,46,HistGradientBoosting,0.331318
+store,47,HistGradientBoosting,0.680710
+store,48,HistGradientBoosting,0.628402
+store,49,HistGradientBoosting,0.334337
+store,50,HistGradientBoosting,0.695486
+store,51,HistGradientBoosting,0.383421
+store,52,HistGradientBoosting,0.349986
+store,53,HistGradientBoosting,0.387710
+store,54,HistGradientBoosting,0.426258
+date,2017-07-31 00:00:00,HistGradientBoosting,0.404970
+date,2017-08-01 00:00:00,HistGradientBoosting,0.408713
+date,2017-08-02 00:00:00,HistGradientBoosting,0.406889
+date,2017-08-03 00:00:00,HistGradientBoosting,0.418629
+date,2017-08-04 00:00:00,HistGradientBoosting,0.439013
+date,2017-08-05 00:00:00,HistGradientBoosting,0.410178
+date,2017-08-06 00:00:00,HistGradientBoosting,0.449242
+date,2017-08-07 00:00:00,HistGradientBoosting,0.444628
+date,2017-08-08 00:00:00,HistGradientBoosting,0.448305
+date,2017-08-09 00:00:00,HistGradientBoosting,0.430905
+date,2017-08-10 00:00:00,HistGradientBoosting,0.447691
+date,2017-08-11 00:00:00,HistGradientBoosting,0.511398
+date,2017-08-12 00:00:00,HistGradientBoosting,0.490205
+date,2017-08-13 00:00:00,HistGradientBoosting,0.493846
+date,2017-08-14 00:00:00,HistGradientBoosting,0.472028
+date,2017-08-15 00:00:00,HistGradientBoosting,0.498996
