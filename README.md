@@ -1,125 +1,63 @@
-# Store Sales: Time Series Forecasting
+# Store Sales Time-Series Forecasting
 
-## Project Overview
+This project develops a reproducible workflow for forecasting daily product-family sales across 54 grocery stores in Ecuador. It follows the full path from raw-data inspection to a validated 16-day forecast, with particular attention to chronological evaluation, leakage-safe feature construction, and clear reporting.
 
-This repository contains an undergraduate introductory research project based on Kaggle's **Store Sales - Time Series Forecasting** competition. The goal is to develop a clear and reproducible forecasting study for daily sales across product families and Favorita stores in Ecuador.
+## Problem and data
 
-The work is organized in stages. Stage 1 establishes the project structure and audits the raw data, Stage 2 provides descriptive exploratory analysis, Stage 3 establishes chronological validation and simple baselines, Stage 4 engineers leakage-safe features, and Stage 5 compares lightweight models. Final forecasting and reporting belong to Stage 6.
+Each observation is identified by `date`, `store_nbr`, and `family`; the response is daily `sales`. The supporting data describe promotions, store type and cluster, transactions, holidays, and oil prices. Historical sales run from 2013-01-01 to 2017-08-15, and the forecast horizon covers the following 16 days.
 
-## Dataset
+The raw files remain unchanged in `data/raw/`. Generated tables, figures, reports, and forecasts are kept separately so that every analytical result can be traced back to code.
 
-The raw competition files are stored in `data/raw/`. The main forecasting unit is defined by `date`, `store_nbr`, and `family`, and the training target is `sales`.
+## Approach
 
-The data include historical sales, the 16-day test horizon, store metadata, oil prices, holidays and events, daily transactions, and a sample submission. Raw files must remain unchanged.
+The workflow is deliberately incremental:
 
-## Repository Structure
+1. **Audit the inputs.** Check schemas, keys, missing values, duplicates, date coverage, and consistency across files.
+2. **Understand the series.** Examine seasonality, store and family scale, promotions, transactions, holidays, earthquake-related changes, and oil-price patterns.
+3. **Establish honest evaluation.** Reserve the final 16 observed days as a chronological holdout and compare simple seasonal forecasts before fitting machine-learning models.
+4. **Build leakage-safe features.** Combine calendar variables, store metadata, promotions, and lagged or rolling sales summaries. Target-derived validation and forecast features use only observations available before the prediction period.
+5. **Compare compact models.** Evaluate Ridge regression and HistGradientBoosting on the same rows and the same preprocessed feature matrix.
+6. **Produce the forecast.** Refit the selected specification once on the shifted 365-day training window, verify the output, and preserve the final 16-day predictions.
+
+The shared feature matrix is built once per experiment stage; configurations differ by column selection rather than repeated feature-pipeline execution.
+
+## Validation and findings
+
+Random train/test splitting would let future observations influence an earlier forecasting task, so the project uses 2017-07-31 through 2017-08-15 as a fixed holdout. RMSLE is used because sales vary greatly across store-family series and the metric reduces the dominance of the largest values.
+
+| Method | Validation RMSLE |
+|---|---:|
+| 8-week weekday mean | 0.520631 |
+| Ridge regression | 0.494938 |
+| HistGradientBoosting | **0.449788** |
+
+The experiments indicate that recent sales history—especially lag and rolling features—contains the most useful incremental signal. HistGradientBoosting improves on the linear model for 30 of 33 families and 52 of 54 stores, suggesting that nonlinear relationships help across most of the dataset rather than only a few large series. Holiday and oil variables, in their simplified form, did not improve the controlled feature check and were excluded from the final specification.
+
+These results are predictive, not causal. The single holdout window also means that performance may vary in other seasonal or event-driven periods.
+
+## Repository guide
 
 ```text
-store-sales-time-series-forecasting/
-|-- README.md
-|-- .gitignore
-|-- requirements.txt
-|-- data/
-|   |-- raw/
-|   `-- processed/
-|-- notebooks/
-|-- reports/
-|   |-- data_audit.md
-|   `-- figures/
+.
+|-- data/raw/                 # unchanged source data
+|-- notebooks/               # readable analysis from EDA to final forecast
+|-- reports/                 # concise findings, generated tables, and figures
 |-- src/
-|   |-- __init__.py
-|   `-- audit_data.py
-`-- submissions/
+|   |-- audit_data.py        # input validation and audit report
+|   |-- baselines.py         # chronological split, metric, and seasonal baselines
+|   |-- features.py          # shared leakage-safe feature construction
+|   |-- models.py            # preprocessing and controlled model comparison
+|   `-- final_forecast.py    # one final fit, forecast, and output checks
+|-- submissions/             # generated prediction file
+|-- requirements.txt
+`-- README.md
 ```
 
-## Setup and Data Audit
+For a quick overview, read [`reports/final_project_summary.md`](reports/final_project_summary.md). For implementation details, follow the source modules in their dependency order: `audit_data.py`, `baselines.py`, `features.py`, `models.py`, then `final_forecast.py`. The notebooks provide a narrative companion to each analytical step.
 
-Create and activate a Python virtual environment, then install the Stage 1 dependency:
+## Reproduce the workflow
 
-```bash
-python -m pip install -r requirements.txt
-```
-
-From the repository root, generate the audit report with:
-
-```bash
-python -m src.audit_data
-```
-
-The script supports either `data/raw/train.csv` or a ZIP archive such as `data/raw/train.csv.zip`. It prints a concise progress summary and writes [the raw data audit](reports/data_audit.md).
-
-## Planned Workflow
-
-1. Project setup and raw data audit
-2. Exploratory data analysis
-3. Time-based validation and simple baselines
-4. Interpretable feature engineering
-5. Model comparison
-6. Error analysis and final reporting
-
-Later stages will prioritize reproducibility, avoid data leakage, and compare methods under a consistent time-based validation design.
-
-## Stage 1 Status
-
-Stage 1 is complete. The repository now has a reproducible structure, a simple audit command, and a generated report covering dimensions, data types, missing values, duplicates, date ranges, key uniqueness, and cross-file consistency.
-
-No exploratory analysis, feature engineering, predictive modeling, validation, or submission generation is included in this stage. Known oil, holiday, and transaction data issues are documented for later work.
-
-## Stage 2 Status
-
-Stage 2 is complete. The reproducible [EDA notebook](notebooks/02_exploratory_data_analysis.ipynb) examines temporal, weekday, monthly, family, store, promotion, transaction, holiday, earthquake, and oil-price patterns. A concise [EDA summary](reports/eda_summary.md) presents the main findings and selected figures.
-
-The analysis is descriptive and associative. It does not include predictive modeling, a validation split, model features, or submission generation; those tasks remain for later stages.
-
-## Stage 3 Status
-
-Stage 3 is complete. The [validation and baseline notebook](notebooks/03_validation_and_baselines.ipynb) and [baseline results report](reports/baseline_results.md) use the final 16 training dates (`2017-07-31` through `2017-08-15`) as a leakage-safe holdout.
-
-The best transparent baseline is the **8-week weekday mean**, with validation RMSLE **0.520631**. The reusable baseline module can refresh the generated score table with:
-
-```bash
-python -m src.baselines
-```
-
-No machine-learning model, Kaggle test prediction, or submission was included in Stage 3.
-
-## Stage 4 Status
-
-Stage 4 is complete. The [feature-engineering notebook](notebooks/04_feature_engineering.ipynb) and [feature-engineering report](reports/feature_engineering.md) document one shared feature build reused across four fixed Ridge checks.
-
-The best check uses calendar, store, promotion, lag, and rolling features, producing 29 encoded columns and validation RMSLE **0.494938**. This improves on the Stage 3 benchmark of `0.520631`. Simplified holiday and oil features did not improve the check and are deferred.
-
-Refresh the generated feature tables with:
-
-```bash
-python -m src.features
-```
-
-In Stage 4, Ridge is used only to verify feature information; no Kaggle test prediction or submission is generated.
-
-## Stage 5 Status
-
-Stage 5 is complete. The [model-comparison notebook](notebooks/05_model_comparison.ipynb) and [model-comparison report](reports/model_comparison.md) compare the Stage 3 weekday baseline, Ridge, and one fixed HistGradientBoosting model on the unchanged 16-day holdout.
-
-Model ranking by validation RMSLE:
-
-1. HistGradientBoosting — **0.449788**
-2. Ridge regression — **0.494938**
-3. Weekday mean baseline — **0.520631**
-
-HistGradientBoosting is selected for Stage 6 because it provides a clear validation improvement at modest computational cost.
-
-## Stage 6 Status
-
-Stage 6 is complete. The selected HistGradientBoosting specification was fitted once on the shifted 365-day window (`2016-08-16` through `2017-08-15`) and used to forecast the 16-day Kaggle test period.
-
-- [Final forecast notebook](notebooks/06_final_forecast.ipynb)
-- [Final project summary](reports/final_project_summary.md)
-- Submission: `submissions/store_sales_hgb_submission.csv`
-
-The generated submission contains 28,512 rows in exact test/sample ID order. It has not been uploaded automatically, and no Kaggle leaderboard score is recorded.
-
-## Reproduction
+Create a Python environment, install the dependencies, and run the modules from the repository root:
 
 ```bash
 python -m pip install -r requirements.txt
@@ -130,4 +68,13 @@ python -m src.models
 python -m src.final_forecast
 ```
 
-Final validated ranking: HistGradientBoosting `0.449788`, Ridge `0.494938`, and weekday baseline `0.520631` RMSLE on the same chronological holdout.
+The last command writes `submissions/store_sales_hgb_submission.csv` and a set of integrity checks to `reports/tables/final_submission_checks.csv`. The generated file contains 28,512 finite, nonnegative predictions in the original test-ID order.
+
+## Main limitations and next steps
+
+- Evaluation currently uses one 16-day chronological window; several carefully chosen backtesting windows would provide stronger evidence of temporal stability.
+- Holiday features do not yet model locale, transfers, or event interactions in full detail.
+- Intermittent and spike-prone product families remain difficult and may benefit from specialized demand models or additional error analysis.
+- The model comparison intentionally uses fixed, lightweight specifications; future work should expand it cautiously while preserving the same leakage controls.
+
+Detailed findings are available in [`reports/data_audit.md`](reports/data_audit.md), [`reports/eda_summary.md`](reports/eda_summary.md), [`reports/baseline_results.md`](reports/baseline_results.md), [`reports/feature_engineering.md`](reports/feature_engineering.md), and [`reports/model_comparison.md`](reports/model_comparison.md).
