@@ -107,4 +107,27 @@ Model ranking by validation RMSLE:
 2. Ridge regression — **0.494938**
 3. Weekday mean baseline — **0.520631**
 
-HistGradientBoosting is selected for Stage 6 because it provides a clear validation improvement at modest computational cost. Stage 6 remains incomplete, and no Kaggle test prediction or submission has been generated.
+HistGradientBoosting is selected for Stage 6 because it provides a clear validation improvement at modest computational cost.
+
+## Stage 6 Status
+
+Stage 6 is complete. The selected HistGradientBoosting specification was fitted once on the shifted 365-day window (`2016-08-16` through `2017-08-15`) and used to forecast the 16-day Kaggle test period.
+
+- [Final forecast notebook](notebooks/06_final_forecast.ipynb)
+- [Final project summary](reports/final_project_summary.md)
+- Submission: `submissions/store_sales_hgb_submission.csv`
+
+The generated submission contains 28,512 rows in exact test/sample ID order. It has not been uploaded automatically, and no Kaggle leaderboard score is recorded.
+
+## Reproduction
+
+```bash
+python -m pip install -r requirements.txt
+python -m src.audit_data
+python -m src.baselines
+python -m src.features
+python -m src.models
+python -m src.final_forecast
+```
+
+Final validated ranking: HistGradientBoosting `0.449788`, Ridge `0.494938`, and weekday baseline `0.520631` RMSLE on the same chronological holdout.

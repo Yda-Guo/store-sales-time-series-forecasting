@@ -37,3 +37,4 @@ data/raw/train.csv
 # Future generated submissions (keep the directory placeholder)
 submissions/*.csv
 !submissions/.gitkeep
+!submissions/store_sales_hgb_submission.csv

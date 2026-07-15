@@ -45,6 +45,19 @@ def _preprocess(train: pd.DataFrame, validation: pd.DataFrame):
     return transformer, train_matrix, validation_matrix
 
 
+def make_hist_gradient_boosting() -> HistGradientBoostingRegressor:
+    """Return the fixed Stage 5 model specification."""
+    return HistGradientBoostingRegressor(
+        learning_rate=0.08,
+        max_iter=120,
+        max_leaf_nodes=31,
+        l2_regularization=0.1,
+        early_stopping=True,
+        validation_fraction=0.1,
+        random_state=42,
+    )
+
+
 def _fit_models(train_matrix, validation_matrix, train_target):
     """Fit Ridge and one fixed HistGradientBoosting specification."""
     target = np.log1p(train_target)
@@ -56,15 +69,7 @@ def _fit_models(train_matrix, validation_matrix, train_target):
     timings["Ridge regression"] = perf_counter() - start
     predictions["Ridge regression"] = np.clip(np.expm1(ridge.predict(validation_matrix)), 0, None)
 
-    hist = HistGradientBoostingRegressor(
-        learning_rate=0.08,
-        max_iter=120,
-        max_leaf_nodes=31,
-        l2_regularization=0.1,
-        early_stopping=True,
-        validation_fraction=0.1,
-        random_state=42,
-    )
+    hist = make_hist_gradient_boosting()
     start = perf_counter()
     hist.fit(train_matrix, target)
     timings["HistGradientBoosting"] = perf_counter() - start
