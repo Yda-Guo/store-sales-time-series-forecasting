@@ -4,7 +4,7 @@
 
 This repository contains an undergraduate introductory research project based on Kaggle's **Store Sales - Time Series Forecasting** competition. The goal is to develop a clear and reproducible forecasting study for daily sales across product families and Favorita stores in Ecuador.
 
-The work is organized in stages. Stage 1 establishes the project structure and audits the raw data; exploratory analysis, validation, feature engineering, and modeling belong to later stages.
+The work is organized in stages. Stage 1 establishes the project structure and audits the raw data, while Stage 2 provides descriptive exploratory analysis. Validation, feature engineering, and modeling belong to later stages.
 
 ## Dataset
 
@@ -64,3 +64,9 @@ Later stages will prioritize reproducibility, avoid data leakage, and compare me
 Stage 1 is complete. The repository now has a reproducible structure, a simple audit command, and a generated report covering dimensions, data types, missing values, duplicates, date ranges, key uniqueness, and cross-file consistency.
 
 No exploratory analysis, feature engineering, predictive modeling, validation, or submission generation is included in this stage. Known oil, holiday, and transaction data issues are documented for later work.
+
+## Stage 2 Status
+
+Stage 2 is complete. The reproducible [EDA notebook](notebooks/02_exploratory_data_analysis.ipynb) examines temporal, weekday, monthly, family, store, promotion, transaction, holiday, earthquake, and oil-price patterns. A concise [EDA summary](reports/eda_summary.md) presents the main findings and selected figures.
+
+The analysis is descriptive and associative. It does not include predictive modeling, a validation split, model features, or submission generation; those tasks remain for later stages.
