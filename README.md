@@ -4,7 +4,7 @@
 
 This repository contains an undergraduate introductory research project based on Kaggle's **Store Sales - Time Series Forecasting** competition. The goal is to develop a clear and reproducible forecasting study for daily sales across product families and Favorita stores in Ecuador.
 
-The work is organized in stages. Stage 1 establishes the project structure and audits the raw data, Stage 2 provides descriptive exploratory analysis, and Stage 3 establishes chronological validation and simple baselines. Feature engineering and modeling belong to later stages.
+The work is organized in stages. Stage 1 establishes the project structure and audits the raw data, Stage 2 provides descriptive exploratory analysis, Stage 3 establishes chronological validation and simple baselines, and Stage 4 engineers leakage-safe features. Model comparison belongs to later stages.
 
 ## Dataset
 
@@ -81,4 +81,18 @@ The best transparent baseline is the **8-week weekday mean**, with validation RM
 python -m src.baselines
 ```
 
-No machine-learning model, Kaggle test prediction, or submission is included. Stage 4 and later stages remain incomplete.
+No machine-learning model, Kaggle test prediction, or submission was included in Stage 3.
+
+## Stage 4 Status
+
+Stage 4 is complete. The [feature-engineering notebook](notebooks/04_feature_engineering.ipynb) and [feature-engineering report](reports/feature_engineering.md) document one shared feature build reused across four fixed Ridge checks.
+
+The best check uses calendar, store, promotion, lag, and rolling features, producing 29 encoded columns and validation RMSLE **0.494938**. This improves on the Stage 3 benchmark of `0.520631`. Simplified holiday and oil features did not improve the check and are deferred.
+
+Refresh the generated feature tables with:
+
+```bash
+python -m src.features
+```
+
+Ridge is used only to verify feature information. Stage 5 model comparison remains incomplete, and no Kaggle test prediction or submission has been generated.

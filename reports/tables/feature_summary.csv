@@ -1,0 +1,29 @@
+feature_name,feature_group,data_type,source,target_derived,leakage_note,validation_missing_count
+day_of_week,calendar,int32,date,False,known or external at forecast time,0
+day_of_month,calendar,int32,date,False,known or external at forecast time,0
+month,calendar,int32,date,False,known or external at forecast time,0
+year,calendar,int32,date,False,known or external at forecast time,0
+is_weekend,calendar,int8,date,False,known or external at forecast time,0
+is_month_start,calendar,int8,date,False,known or external at forecast time,0
+is_month_end,calendar,int8,date,False,known or external at forecast time,0
+is_payday,calendar,int8,date,False,known or external at forecast time,0
+store_type,store,object,stores.csv,False,known or external at forecast time,0
+cluster,store,int64,stores.csv,False,known or external at forecast time,0
+onpromotion,promotion,int64,train onpromotion,False,known or external at forecast time,0
+is_promoted,promotion,int8,train onpromotion,False,known or external at forecast time,0
+log_onpromotion,promotion,float64,train onpromotion,False,known or external at forecast time,0
+lag_7,target-derived,float64,pre-validation sales,True,pre-validation sales only,0
+lag_14,target-derived,float64,pre-validation sales,True,pre-validation sales only,0
+lag_28,target-derived,float64,pre-validation sales,True,pre-validation sales only,0
+rolling_mean_7,target-derived,float64,pre-validation sales,True,pre-validation sales only,0
+rolling_mean_28,target-derived,float64,pre-validation sales,True,pre-validation sales only,0
+rolling_std_28,target-derived,float64,pre-validation sales,True,pre-validation sales only,0
+log_lag_7,target-derived,float64,pre-validation sales,True,pre-validation sales only,0
+log_lag_14,target-derived,float64,pre-validation sales,True,pre-validation sales only,0
+log_lag_28,target-derived,float64,pre-validation sales,True,pre-validation sales only,0
+log_rolling_mean_7,target-derived,float64,pre-validation sales,True,pre-validation sales only,0
+log_rolling_mean_28,target-derived,float64,pre-validation sales,True,pre-validation sales only,0
+log_rolling_std_28,target-derived,float64,pre-validation sales,True,pre-validation sales only,0
+is_national_holiday,holiday/oil,int8,holidays_events.csv,False,known or external at forecast time,0
+is_transfer_day,holiday/oil,int8,holidays_events.csv,False,known or external at forecast time,0
+oil_price,holiday/oil,float64,oil.csv,False,known or external at forecast time,0

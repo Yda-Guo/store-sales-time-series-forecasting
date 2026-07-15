@@ -1,0 +1,5 @@
+rank,configuration,included_feature_groups,training_window,model_specification,encoded_feature_count,validation_rmsle,difference_from_baseline
+1,Add lag and rolling,calendar; store; promotion; lag; rolling,final 365 days before validation,"Ridge(alpha=1.0), log1p target",29,0.494938,-0.025693
+2,Add holiday and oil,calendar; store; promotion; lag; rolling; holiday; oil,final 365 days before validation,"Ridge(alpha=1.0), log1p target",32,0.495017,-0.025614
+3,Add promotion,calendar; store; promotion,final 365 days before validation,"Ridge(alpha=1.0), log1p target",17,1.545483,1.024852
+4,Calendar and store,calendar; store,final 365 days before validation,"Ridge(alpha=1.0), log1p target",14,2.481887,1.961256
