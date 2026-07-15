@@ -1,0 +1,38 @@
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyd
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDE settings
+.vscode/
+.idea/
+
+# Operating system files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.log
+
+# Generated datasets
+data/interim/
+data/processed/
+
+# Model files
+models/
+
+# Generated outputs
+outputs/
+reports/figures/
+
+# Kaggle submissions
+submissions/*.csv
