@@ -3,36 +3,37 @@ __pycache__/
 *.py[cod]
 *.pyd
 
-# Jupyter Notebook
-.ipynb_checkpoints/
-
 # Virtual environments
 .venv/
 venv/
 env/
 
-# IDE settings
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# IDE and operating system files
 .vscode/
 .idea/
-
-# Operating system files
 .DS_Store
 Thumbs.db
 
 # Temporary files
 *.tmp
+*.temp
 *.log
+*.bak
+*.swp
 
-# Generated datasets
+# Generated datasets and model artifacts
 data/interim/
-data/processed/
-
-# Model files
+data/processed/*
+!data/processed/.gitkeep
 models/
+artifacts/
 
-# Generated outputs
-outputs/
-reports/figures/
+# Local uncompressed copy when the tracked training data are zipped
+data/raw/train.csv
 
-# Kaggle submissions
+# Future generated submissions (keep the directory placeholder)
 submissions/*.csv
+!submissions/.gitkeep
