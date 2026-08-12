@@ -154,7 +154,7 @@ def build_report(data: dict[str, pd.DataFrame], sources: dict[str, Path]) -> str
         add_check(lines, "All used stores appear in stores.csv", yes_no(used <= set(stores["store_nbr"])))
     if oil is not None:
         oil_dates = pd.to_datetime(oil["date"])
-        add_check(lines, "Oil missing prices", f"{int(oil['dcoilwtico'].isna().sum()):,}", "Not imputed in Stage 1")
+        add_check(lines, "Oil missing prices", f"{int(oil['dcoilwtico'].isna().sum()):,}", "Retained without imputation in the raw-data audit")
         add_check(lines, "Oil duplicate dates", f"{int(oil_dates.duplicated().sum()):,}")
         if train is not None and test is not None:
             all_dates = pd.concat([pd.to_datetime(train["date"]), pd.to_datetime(test["date"])])
@@ -206,20 +206,19 @@ def build_report(data: dict[str, pd.DataFrame], sources: dict[str, Path]) -> str
         "- The forecasting unit is one `date` / `store_nbr` / `family` combination.",
         "- The test period follows the training period and contains a 16-day horizon.",
         "- Train and test use the same store and product-family sets, and the sample submission aligns with test IDs.",
-        "- Missing oil prices are retained. No imputation is performed in this stage.",
+        "- Missing oil prices are retained in the raw files; oil is excluded from the final compact model.",
         "- Several holiday records can legitimately share a date. These are not automatically invalid duplicates because locale, type, and description can differ.",
         "- Transaction coverage is historical and incomplete at the date/store level; missing records should be interpreted carefully rather than automatically converted to zero.",
         "",
-        "## 9. Issues for later stages",
+        "## 9. Modeling decisions and limitations",
         "",
-        "- Decide on a transparent method for handling missing and non-daily oil prices.",
-        "- Design locale-aware holiday processing, including transferred holidays and `Transfer` records.",
-        "- Investigate dates and store/date combinations without transaction records before using transactions in analysis.",
-        "- Preserve time order and avoid information from the test period when later constructing validation data.",
+        "- Oil, holidays, and transactions are excluded from the final compact model because they require additional availability or preprocessing assumptions.",
+        "- Known-future promotions, calendar variables, store metadata, and forecast-origin sales summaries form the final information set.",
+        "- All validation preserves time order; observations after a forecast origin cannot enter target-history features.",
         "",
         "## 10. Conclusion",
         "",
-        "The raw files are structurally consistent and ready for exploratory analysis. The known oil, holiday, and transaction coverage issues are documented and should be handled explicitly in later stages. No raw values were changed during this audit.",
+        "The raw files are structurally consistent for the completed forecasting workflow. Oil, holiday, and transaction coverage limitations are documented above, and no raw values were changed during this audit.",
         "",
     ]
     return "\n".join(lines)
