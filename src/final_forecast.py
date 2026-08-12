@@ -17,7 +17,6 @@ ROOT = Path(__file__).resolve().parents[1]
 SUBMISSION_PATH = ROOT / "submissions" / "store_sales_hgb_submission.csv"
 CHECKS_PATH = ROOT / "reports" / "tables" / "final_submission_checks.csv"
 FIGURE_DIR = ROOT / "reports" / "figures" / "final"
-REPORT_PATH = ROOT / "reports" / "final_project_summary.md"
 TEST_ORIGIN = pd.Timestamp("2017-08-15")
 
 
@@ -63,24 +62,6 @@ def main() -> None:
     ax.set(title="Forecast Sales Across the Kaggle Test Window", xlabel="Date", ylabel="Predicted sales")
     fig.tight_layout(); fig.savefig(FIGURE_DIR / "test_daily_predictions.png", dpi=150); plt.close(fig)
 
-    final_scores = pd.read_csv(ROOT / "reports" / "tables" / "final_holdout_scores.csv")
-    best = final_scores.loc[final_scores["model"].str.startswith("HistGradientBoosting")].iloc[0]
-    REPORT_PATH.write_text(f"""# Final Project Summary
-
-The final workflow uses one pooled direct model for all 54 stores, 33 product families, and 16 forecast horizons. Every target-history feature is frozen at its forecast origin. Three development origins selected {iterations} boosting iterations; the separate 2017-07-30 origin was evaluated exactly once and achieved RMSLE **{best['rmsle']:.6f}**.
-
-The generated submission has {len(submission):,} rows in the sample submission's original ID order. It is intentionally ignored by Git because it is a reproducible generated artifact, not a source file.
-
-![Test-period predictions](figures/final/test_daily_predictions.png)
-
-## Reproduce
-
-Run `python -m src.audit_data`, `python -m src.eda`, `python -m unittest discover -s tests -v`, `python -m src.backtesting`, and `python -m src.final_forecast` from the repository root.
-
-## Limits
-
-This is a predictive benchmark, not a causal analysis. The compact rolling-origin design cannot cover every retail regime, and abrupt events remain difficult. Kaggle test labels are unavailable locally, so the final CSV is structurally validated but not assigned a local test score.
-""", encoding="utf-8")
     print(checks.to_string(index=False))
     print(f"Submission: {SUBMISSION_PATH}")
 

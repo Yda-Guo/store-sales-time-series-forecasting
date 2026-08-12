@@ -10,7 +10,6 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
 SCORES_PATH = ROOT / "reports" / "tables" / "baseline_scores.csv"
-REPORT_PATH = ROOT / "reports" / "baseline_results.md"
 DEVELOPMENT_ORIGINS = tuple(pd.Timestamp(value) for value in ("2017-03-31", "2017-05-15", "2017-06-30"))
 
 
@@ -34,12 +33,6 @@ def main() -> None:
                      "rmsle": rmsle(features["sales"], prediction), "rows": len(features)})
     scores = pd.DataFrame(rows)
     SCORES_PATH.parent.mkdir(parents=True, exist_ok=True); scores.to_csv(SCORES_PATH, index=False, float_format="%.6f")
-    REPORT_PATH.write_text(f"""# Seasonal Baseline
-
-The reference forecast is the mean sale for the matching weekday over the eight weeks ending at each forecast origin. It predicts all 16 horizons without reading sales from inside the target block.
-
-Across the three declared development origins, mean RMSLE is **{scores['rmsle'].mean():.6f}**. These folds are used for model development; the separate 2017-07-30 final holdout is not used here.
-""", encoding="utf-8")
     print(scores.to_string(index=False))
 
 

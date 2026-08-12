@@ -4,6 +4,8 @@
 
 Each supervised row is `forecast_origin × store × family × horizon`. Horizons 1–16 are pooled in one model with an explicit horizon feature. Target-history variables are fixed at the forecast origin, so no future true sale inside a 16-day block can enter another prediction.
 
+The transparent reference forecast is the mean sale for the matching weekday over the eight weeks ending at each forecast origin. Ridge provides a regularized linear comparison using the same information set; HistGradientBoosting tests whether modest nonlinearity improves forecast accuracy.
+
 Development origins were fixed before comparison: 2017-03-31, 2017-05-15, 2017-06-30. Each fold uses 16 earlier origins on a fixed 14-day grid, skipping incomplete calendar blocks. The final 2017-07-30 origin was untouched until the iteration count and feature set were frozen.
 
 ## Development backtests
@@ -25,8 +27,6 @@ The predefined HGB choice was 120 iterations, selected by mean development RMSLE
 | Ridge | 0.635423 |
 | HistGradientBoosting (120 iter) | 0.433648 |
 
-These values are not directly comparable to the former `0.449788`: the old result used different target-history semantics and reused this holdout for development.
-
 ## Horizon and family behavior
 
 ![Final holdout error by horizon](figures/models/horizon_errors.png)
@@ -36,4 +36,8 @@ HGB final-holdout RMSLE ranges from 0.388 to 0.515 across horizons. It has lower
 ## Interpretation and limitations
 
 The comparison asks whether modest nonlinearity improves on transparent alternatives under identical forecast-origin information. Results are predictive, not causal. Three development origins and one final origin cannot represent every future regime; intermittent families and event-driven spikes remain difficult.
+
+## Final forecast artifact
+
+After the specification is frozen, `python -m src.final_forecast` fits HGB on 24 legitimate historical origins and generates 28,512 nonnegative Kaggle-test predictions in the sample submission's original ID order. The submission CSV is a reproducible local artifact and is intentionally ignored by Git; `reports/tables/final_submission_checks.csv` records its structural validation. No Kaggle leaderboard score is claimed.
 

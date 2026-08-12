@@ -10,5 +10,4 @@ data/raw/train.csv
 
 # Reproducible local deliverable.
 submissions/*.csv
-!submissions/.gitkeep
 
