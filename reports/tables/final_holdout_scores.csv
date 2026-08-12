@@ -1,0 +1,5 @@
+forecast_origin,validation_start,validation_end,model,rmsle,rows,training_origins,training_examples,fit_seconds,role
+2017-07-30,2017-07-31,2017-08-15,Seasonal baseline,0.520631,28512,20,570240,0.000000,one-time final holdout
+2017-07-30,2017-07-31,2017-08-15,Ridge,0.635423,28512,20,570240,2.163609,one-time final holdout
+2017-07-30,2017-07-31,2017-08-15,HistGradientBoosting (120 iter),0.433648,28512,20,570240,3.350959,one-time final holdout
+

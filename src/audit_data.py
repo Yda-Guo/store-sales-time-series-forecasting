@@ -87,7 +87,7 @@ def build_report(data: dict[str, pd.DataFrame], sources: dict[str, Path]) -> str
         "## 1. Files inspected",
         "",
     ]
-    lines.extend(f"- `{name}` (read from `{sources[name].name}`)" for name in data)
+    lines.extend(f"- `{name}` (direct CSV or a raw-data archive member)" for name in data)
 
     lines += ["", "## 2. Dataset dimensions", "", "| Dataset | Rows | Columns | Approx. memory (MiB) | Columns |", "|---|---:|---:|---:|---|"]
     for name, item in summaries.items():
@@ -204,7 +204,7 @@ def build_report(data: dict[str, pd.DataFrame], sources: dict[str, Path]) -> str
         "## 8. Important competition-specific observations",
         "",
         "- The forecasting unit is one `date` / `store_nbr` / `family` combination.",
-        "- The test period follows the training period and contains a short 15-day horizon.",
+        "- The test period follows the training period and contains a 16-day horizon.",
         "- Train and test use the same store and product-family sets, and the sample submission aligns with test IDs.",
         "- Missing oil prices are retained. No imputation is performed in this stage.",
         "- Several holiday records can legitimately share a date. These are not automatically invalid duplicates because locale, type, and description can differ.",
@@ -257,3 +257,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+

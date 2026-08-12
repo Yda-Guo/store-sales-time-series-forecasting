@@ -1,80 +1,58 @@
 # Store Sales Time-Series Forecasting
 
-This project develops a reproducible workflow for forecasting daily product-family sales across 54 grocery stores in Ecuador. It follows the full path from raw-data inspection to a validated 16-day forecast, with particular attention to chronological evaluation, leakage-safe feature construction, and clear reporting.
+This repository is a reproducible, leakage-tested solution for Kaggle's 16-day Ecuador grocery-sales task: 54 stores x 33 product families x 16 forecast horizons.
 
-## Problem and data
+## Forecast design
 
-Each observation is identified by `date`, `store_nbr`, and `family`; the response is daily `sales`. The supporting data describe promotions, store type and cluster, transactions, holidays, and oil prices. Historical sales run from 2013-01-01 to 2017-08-15, and the forecast horizon covers the following 16 days.
+The implementation uses pooled direct forecasting. One supervised row represents `forecast_origin x store x family x horizon`; a single model learns all horizons with `horizon` as an explicit feature. Every target-history value is frozen at the origin. Training, development, final holdout, and Kaggle inference all call the same feature constructor.
 
-The raw files remain unchanged in `data/raw/`. Generated tables, figures, reports, and forecasts are kept separately so that every analytical result can be traced back to code.
+The evaluation contract is fixed:
 
-## Approach
+- Development origins: 2017-03-31, 2017-05-15, and 2017-06-30.
+- Final holdout origin: 2017-07-30, covering 2017-07-31 through 2017-08-15.
+- Metric: RMSLE.
+- Models: eight-week weekday seasonal baseline, Ridge, and HistGradientBoosting.
+- HGB iteration count: selected only by mean development-fold RMSLE; random row-level early stopping is disabled.
 
-The workflow is deliberately incremental:
+The prior single-holdout HGB score of `0.449788` is retained only as historical context. It is not directly comparable because the former pipeline changed lag semantics between fitting and prediction and reused the same window for development.
 
-1. **Audit the inputs.** Check schemas, keys, missing values, duplicates, date coverage, and consistency across files.
-2. **Understand the series.** Examine seasonality, store and family scale, promotions, transactions, holidays, earthquake-related changes, and oil-price patterns.
-3. **Establish honest evaluation.** Reserve the final 16 observed days as a chronological holdout and compare simple seasonal forecasts before fitting machine-learning models.
-4. **Build leakage-safe features.** Combine calendar variables, store metadata, promotions, and lagged or rolling sales summaries. Target-derived validation and forecast features use only observations available before the prediction period.
-5. **Compare compact models.** Evaluate Ridge regression and HistGradientBoosting on the same rows and the same preprocessed feature matrix.
-6. **Produce the forecast.** Refit the selected specification once on the shifted 365-day training window, verify the output, and preserve the final 16-day predictions.
+## Results
 
-The shared feature matrix is built once per experiment stage; configurations differ by column selection rather than repeated feature-pipeline execution.
+HGB achieved mean development RMSLE **0.447500**, beating Ridge and the seasonal baseline in all three development folds. On the untouched final holdout, RMSLE was **0.433648** for HGB, **0.520631** for the seasonal baseline, and **0.635423** for Ridge. HGB beat Ridge at all 16 horizons and all 33 families on paired mean squared-log loss. Its horizon RMSLE ranged from 0.388 to 0.515; the weak positive horizon/error correlation (0.226) does not support a claim of monotonic degradation.
 
-## Validation and findings
-
-Random train/test splitting would let future observations influence an earlier forecasting task, so the project uses 2017-07-31 through 2017-08-15 as a fixed holdout. RMSLE is used because sales vary greatly across store-family series and the metric reduces the dominance of the largest values.
-
-| Method | Validation RMSLE |
-|---|---:|
-| 8-week weekday mean | 0.520631 |
-| Ridge regression | 0.494938 |
-| HistGradientBoosting | **0.449788** |
-
-The experiments indicate that recent sales history—especially lag and rolling features—contains the most useful incremental signal. HistGradientBoosting improves on the linear model for 30 of 33 families and 52 of 54 stores, suggesting that nonlinear relationships help across most of the dataset rather than only a few large series. Holiday and oil variables, in their simplified form, did not improve the controlled feature check and were excluded from the final specification.
-
-These results are predictive, not causal. The single holdout window also means that performance may vary in other seasonal or event-driven periods.
-
-## Repository guide
+## Repository map
 
 ```text
-.
-|-- data/raw/                 # unchanged source data
-|-- notebooks/               # readable analysis from EDA to final forecast
-|-- reports/                 # concise findings, generated tables, and figures
-|-- src/
-|   |-- audit_data.py        # input validation and audit report
-|   |-- baselines.py         # chronological split, metric, and seasonal baselines
-|   |-- features.py          # shared leakage-safe feature construction
-|   |-- models.py            # preprocessing and controlled model comparison
-|   `-- final_forecast.py    # one final fit, forecast, and output checks
-|-- submissions/             # generated prediction file
-|-- requirements.txt
-`-- README.md
+src/audit_data.py       raw-file contract checks
+src/eda.py              compact reproducible EDA
+src/baselines.py        RMSLE and honest seasonal reference
+src/features.py         sole forecast-origin feature implementation
+src/backtesting.py      rolling-origin comparison and final holdout
+src/models.py           compatibility entry point for backtesting
+src/final_forecast.py   frozen fit and Kaggle CSV generation
+tests/                  synthetic temporal-integrity tests
+notebooks/              concise narrative companions
+reports/                generated findings, tables, and figures
 ```
 
-For a quick overview, read [`reports/final_project_summary.md`](reports/final_project_summary.md). For implementation details, follow the source modules in their dependency order: `audit_data.py`, `baselines.py`, `features.py`, `models.py`, then `final_forecast.py`. The notebooks provide a narrative companion to each analytical step.
+## Reproduce
 
-## Reproduce the workflow
-
-Create a Python environment, install the dependencies, and run the modules from the repository root:
+The tracked competition archive supplies `train.csv`; the raw CSV is intentionally ignored. From the repository root:
 
 ```bash
 python -m pip install -r requirements.txt
 python -m src.audit_data
+python -m src.eda
 python -m src.baselines
+python -m unittest discover -s tests -v
 python -m src.features
-python -m src.models
+python -m src.backtesting
 python -m src.final_forecast
 ```
 
-The last command writes `submissions/store_sales_hgb_submission.csv` and a set of integrity checks to `reports/tables/final_submission_checks.csv`. The generated file contains 28,512 finite, nonnegative predictions in the original test-ID order.
+The last command creates `submissions/store_sales_hgb_submission.csv` locally. The generated submission is intentionally ignored by Git; its structural checks are tracked in `reports/tables/final_submission_checks.csv`.
 
-## Main limitations and next steps
+The workflow was tested on Python 3.13 with pandas 2.3, NumPy 2.2, scikit-learn 1.7, Matplotlib 3.10, and nbformat 5.x. Compatible minor-version ranges are recorded in `requirements.txt`.
 
-- Evaluation currently uses one 16-day chronological window; several carefully chosen backtesting windows would provide stronger evidence of temporal stability.
-- Holiday features do not yet model locale, transfers, or event interactions in full detail.
-- Intermittent and spike-prone product families remain difficult and may benefit from specialized demand models or additional error analysis.
-- The model comparison intentionally uses fixed, lightweight specifications; future work should expand it cautiously while preserving the same leakage controls.
+Start with [the final summary](reports/final_project_summary.md), then inspect [the model comparison](reports/model_comparison.md) and [feature design](reports/feature_engineering.md). Results are predictive, not causal, and a compact set of historical origins cannot represent every future retail regime.
 
-Detailed findings are available in [`reports/data_audit.md`](reports/data_audit.md), [`reports/eda_summary.md`](reports/eda_summary.md), [`reports/baseline_results.md`](reports/baseline_results.md), [`reports/feature_engineering.md`](reports/feature_engineering.md), and [`reports/model_comparison.md`](reports/model_comparison.md).

@@ -1,65 +1,39 @@
-# Lightweight Model Comparison
+# Horizon-Aware Model Comparison
 
-## 1. Purpose
+## Protocol
 
-Stage 5 compares two fitted, interpretable-to-explain models against the established weekday baseline. It does not tune extensively, ensemble models, or forecast the Kaggle test set.
+Each supervised row is `forecast_origin × store × family × horizon`. Horizons 1–16 are pooled in one model with an explicit horizon feature. Target-history variables are fixed at the forecast origin, so no future true sale inside a 16-day block can enter another prediction.
 
-## 2. Validation and feature setup
+Development origins were fixed before comparison: 2017-03-31, 2017-05-15, 2017-06-30. Each fold uses 16 earlier origins on a fixed 14-day grid, skipping incomplete calendar blocks. The final 2017-07-30 origin was untouched until the iteration count and feature set were frozen.
 
-The unchanged validation period is **2017-07-31 through 2017-08-15** (16 days, 28,512 rows). The shared Stage 4 matrix uses the final 365 pre-validation days and 29 encoded features: calendar, store, promotion, lag, rolling, and existing log-history columns.
+## Development backtests
 
-## 3. Models compared
+| model | mean | median | min | max |
+| --- | --- | --- | --- | --- |
+| HistGradientBoosting (120 iter) | 0.447501 | 0.421821 | 0.421393 | 0.499288 |
+| HistGradientBoosting (80 iter) | 0.449594 | 0.425129 | 0.423265 | 0.500388 |
+| Ridge | 0.645909 | 0.623045 | 0.603951 | 0.710732 |
+| Seasonal baseline | 0.501865 | 0.511431 | 0.427461 | 0.566702 |
 
-- Weekday mean baseline: reused Stage 3 score.
-- Ridge: Stage 4 preprocessing and alpha 1.0.
-- HistGradientBoosting: one fixed, moderate nonlinear specification with early stopping.
+The predefined HGB choice was 120 iterations, selected by mean development RMSLE with random internal early stopping disabled. HGB beat Ridge in 3 of 3 development folds.
 
-## 4. Computational controls
+## One-time final holdout
 
-Features are built once, preprocessing is fitted once, and both fitted models reuse the same encoded rows. No search, cross-validation, random forest, or repeat fitting is used. Training times are approximate wall-clock measurements, not formal benchmarks.
+| model | RMSLE |
+| --- | --- |
+| Seasonal baseline | 0.520631 |
+| Ridge | 0.635423 |
+| HistGradientBoosting (120 iter) | 0.433648 |
 
-## 5. Overall results
+These values are not directly comparable to the former `0.449788`: the old result used different target-history semantics and reused this holdout for development.
 
-| Rank | Model | RMSLE | vs weekday | vs Ridge | Fit time |
-|---:|---|---:|---:|---:|---:|
-| 1 | HistGradientBoosting | 0.449788 | -0.070843 | -0.045150 | 3.53 s |
-| 2 | Ridge regression | 0.494938 | -0.025693 | +0.000000 | 0.10 s |
-| 3 | Weekday mean baseline | 0.520631 | +0.000000 | +0.025693 | 0.00 s |
+## Horizon and family behavior
 
-![Model ranking](figures/models/01_model_ranking.png)
+![Final holdout error by horizon](figures/models/horizon_errors.png)
 
-HistGradientBoosting beats Ridge by **0.045150 RMSLE**. Both fitted models beat the weekday baseline.
+HGB final-holdout RMSLE ranges from 0.388 to 0.515 across horizons. It has lower paired squared-log loss than Ridge for 16 of 16 horizons and 33 of 33 families. The family table relates this gain to historical zero-sales frequency without making a causal claim.
 
-## 6. Comparison with the Stage 3 baseline
+## Interpretation and limitations
 
-The selected model improves on `0.520631` by **0.070843**. Ridge scores 0.494938, compared with its Stage 4 check of `0.494938`; small timing or floating-point differences may occur, but the implementation is equivalent.
+The comparison asks whether modest nonlinearity improves on transparent alternatives under identical forecast-origin information. Results are predictive, not causal. Three development origins and one final origin cannot represent every future regime; intermittent families and event-driven spikes remain difficult.
 
-## 7. Error patterns by family, store, and date
-
-HistGradientBoosting has lower family RMSLE than Ridge for **30 of 33 families** and lower store RMSLE for **52 of 54 stores**. Difficult families under the selected model include SCHOOL AND OFFICE SUPPLIES, GROCERY II, LINGERIE; difficult stores include 50, 47, 44. Gains are therefore broad.
-
-![Family errors](figures/models/02_family_errors.png)
-
-![Validation-date errors](figures/models/03_date_errors.png)
-
-## 8. Representative forecasts
-
-Low-, medium-, and high-volume series are selected mechanically using the Stage 3 rule. The plots show that both models can miss intermittent changes and spikes even when aggregate RMSLE improves.
-
-![Representative forecasts](figures/models/04_representative_forecasts.png)
-
-## 9. Model interpretation
-
-Stage 4 ablations show that lag and rolling history provide the decisive information. The nonlinear model can represent thresholds and curved relationships that Ridge cannot, but predictive gains do not establish causal effects.
-
-## 10. Preferred model for Stage 6
-
-**HistGradientBoosting** is selected with RMSLE **0.449788** because it has the lowest validation error, remains computationally modest, and uses the established shared pipeline. No ensemble is needed.
-
-## 11. Limitations
-
-This comparison uses one 16-day holdout, one fixed setting per model, conservative horizon-safe target-history features, and approximate timing. Validation leadership does not guarantee Kaggle leaderboard leadership.
-
-## 12. Conclusion
-
-The controlled comparison identifies HistGradientBoosting as the Stage 6 candidate while preserving the simple baseline and Ridge as transparent references.
